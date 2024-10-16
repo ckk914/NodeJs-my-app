@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.0",
+    "mongoose": "^8.7.1",
     "nunjucks": "^3.2.4"
   },
   "devDependencies": {
