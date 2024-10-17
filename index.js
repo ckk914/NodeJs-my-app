@@ -3,7 +3,8 @@ import nunjucks from "nunjucks";
 import bodyParser from "body-parser";
 import fs from "fs";
 import path from "path"; // 추가된 부분
-import { log } from "console";
+import { error, log } from "console";
+import mongoose from "mongoose";
 //resolve() : 현재 작업 디렉토리의 절대 경로를 반환
 const __dirname = path.resolve();
 
@@ -22,11 +23,30 @@ app.use(bodyParser.json());
 // view engine set
 app.set("view engine", "html"); // main.html -> main(.html)
 
-// nunjucks
+// nunjucks (템플릿 엔진을 설정) views 디렉토리
 nunjucks.configure("views", {
   watch: true, // html 파일이 수정될 경우, 다시 반영 후 렌더링
   express: app,
 });
+//mongoose Connect (주소 작성)
+mongoose.connect('mongodb://127.0.0.1:27017')
+  .then(() => console.log('DB 연결 성공'))
+  .catch(e => console.error(e));
+  
+//mongoose set
+//스키마 기능을 사용
+const { Schema } = mongoose;
+
+const WriteSchema = new Schema({
+  title: String,
+  contents: String,
+  date: {
+    type: Date,
+    default: Date.now,
+  }
+})
+// 모델은 Writing이라는 이름으로 WriteSchema를 갖게 된다.
+const Writing = mongoose.model('Writing', WriteSchema);
 
 // middleware
 // main page GET
