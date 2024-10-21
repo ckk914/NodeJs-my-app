@@ -29,9 +29,10 @@ nunjucks.configure("views", {
   express: app,
 });
 //mongoose Connect (주소 작성)
-mongoose.connect('mongodb://127.0.0.1:27017')
-  .then(() => console.log('DB 연결 성공'))
-  .catch(e => console.error(e));
+mongoose
+  .connect("mongodb://127.0.0.1:27017")
+  .then(() => console.log("DB 연결 성공"))
+  .catch((e) => console.error(e));
 
 //mongoose set
 //스키마 기능을 사용
@@ -43,17 +44,21 @@ const WriteSchema = new Schema({
   date: {
     type: Date,
     default: Date.now,
-  }
-})
+  },
+});
 // 모델은 Writing이라는 이름으로 WriteSchema를 갖게 된다.
-const Writing = mongoose.model('Writing', WriteSchema);
+const Writing = mongoose.model("Writing", WriteSchema);
 
 // middleware
 // main page GET
 app.get("/", async (req, res) => {
   //파일 가져옴
-  const fileData = fs.readFileSync(filePath); //읽기
-  const writings = JSON.parse(fileData); //변환
+  // const fileData = fs.readFileSync(filePath); //읽기
+  // const writings = JSON.parse(fileData); //변환
+
+  // find안에 {}빈 것을 넣으면 Writing으로 이루어진 모든 것들을 읽어온다
+  let writings = await Writing.find({});
+
   res.render("main", { list: writings }); //메인에서 list 찍게 해둠
 });
 
@@ -73,7 +78,7 @@ app.post("/write", async (req, res) => {
   // 새로운 객체 생성하여 저장
   const writing = new Writing({
     title: title,
-    contents: contents
+    contents: contents,
   });
 
   try {
@@ -82,18 +87,28 @@ app.post("/write", async (req, res) => {
 
     //렌더링
     res.render("detail", {
-      detail: { title: title, contents: contents }
+      detail: { title: title, contents: contents },
     });
   } catch (err) {
     console.error(err);
     // res.status(500).send("Internal Server Error");
-    res.render('write');
+    res.render("write");
   }
 });
-
-app.get("/detail", async (req, res) => {
-  res.render("detail");
-});
+ 
+//디비에서 데이터를 가져오기 위해 async 를 붙임
+app.get("/detail/:id", async (req, res) => {
+  //id값 = req.params.id
+  const id = req.params.id;
+  try {
+    //db에서 가져오기
+    const detail = await Writing.findOne({ _id: id });
+    res.render('detail', { 'detail': detail });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal Server Error");
+  }
+})
 
 app.listen(3000, () => {
   console.log("Server is running🐶");
