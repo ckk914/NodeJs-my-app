@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if detail %}
 <h1>상세 페이지</h1>
 <p>글 제목: {{ detail.title }}</p>
 <p>글 내용: {{ detail.contents }}</p>
+<a href="/edit/{{ detail.id }}" class="btn">글 수정</a>
+<a href="/delete" class="btn">글 삭제</a>
+{% else %}
+<h1>상세 페이지 수정</h1>
+<form action="/edit/{{ edit.id }}" method="post">
+    <p>글 제목: <input type="text" name="title" value="{{ edit.title }}"></p>
+    <p>글 내용: <input type="text" name="contents" value="{{ edit.contents }}"></p>
+    <input type="submit" value="수정 완료">
+</form>
+{% endif %}
 {% endblock %}
