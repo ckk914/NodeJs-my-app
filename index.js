@@ -49,6 +49,9 @@ const WriteSchema = new Schema({
 // 모델은 Writing이라는 이름으로 WriteSchema를 갖게 된다.
 const Writing = mongoose.model("Writing", WriteSchema);
 
+//-------------------------------------
+// GET
+//-------------------------------------
 // middleware
 // main page GET
 app.get("/", async (req, res) => {
@@ -66,6 +69,10 @@ app.get("/write", (req, res) => {
   res.render("write");
 });
 
+
+//-------------------------------------
+// write
+//-------------------------------------
 //async 요청은 await이 끝났을때야 마무리 된다~!
 app.post("/write", async (req, res) => {
   //request 안에 있는 내용들을 처리
@@ -95,7 +102,10 @@ app.post("/write", async (req, res) => {
     res.render("write");
   }
 });
- 
+
+//-------------------------------------
+// 상세 페이지
+//-------------------------------------
 //디비에서 데이터를 가져오기 위해 async 를 붙임
 app.get("/detail/:id", async (req, res) => {
   //id값 = req.params.id
@@ -110,6 +120,47 @@ app.get("/detail/:id", async (req, res) => {
   }
 })
 
+//-------------------------------------
+// edit => get
+//-------------------------------------
+app.get("/edit/:id", async (req, res) => {
+  const id = req.params.id;
+
+  const edit = await Writing.findOne({ _id: id })
+    .then((result) => {
+      res.render("detail", { edit: result });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
+//-------------------------------------
+// edit => post
+//-------------------------------------
+app.post("/edit/:id", async (req, res) => {
+  const id = req.params.id;
+  const title = req.body.title;
+  const contents = req.body.contents;
+
+  const edit = await Writing.replaceOne(
+    { _id: id },
+    { title: title, contents: contents }
+  )
+    .then((result) => {
+      console.log("update success");
+      res.render("detail", {
+        detail: { id: id, title: title, contents: contents },
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
+
+
+//-----------------------------------
 app.listen(3000, () => {
   console.log("Server is running🐶");
 });
