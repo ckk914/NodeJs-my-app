@@ -158,7 +158,22 @@ app.post("/edit/:id", async (req, res) => {
     });
 });
 
+//-------------------------------------
+// delete => post
+//-------------------------------------
+app.post('/delete/:id', async (req, res) => {
+  const id = req.params.id; //id 가져옴
 
+
+  const delete_content = await Writing.deleteOne({ _id: id }).then(() => {
+    console.log('delete success');
+    res.redirect('/');  //성공 시 메인으로 이동 시키자~!
+    
+  }).catch((err) => {
+    console.error(err);
+    
+  })
+})
 
 //-----------------------------------
 app.listen(3000, () => {
