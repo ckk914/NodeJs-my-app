@@ -6,7 +6,10 @@
 <p>글 제목: {{ detail.title }}</p>
 <p>글 내용: {{ detail.contents }}</p>
 <a href="/edit/{{ detail.id }}" class="btn">글 수정</a>
-<a href="/delete" class="btn">글 삭제</a>
+    <form action="/delete/{{ detail.id }}" method="post">
+        <input type="submit" value="글 삭제">
+    </form>
+<!-- <a href="/delete/{{ detail.id }}" class="btn">글 삭제</a> -->
 {% else %}
 <h1>상세 페이지 수정</h1>
 <form action="/edit/{{ edit.id }}" method="post">
