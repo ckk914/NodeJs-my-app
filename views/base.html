@@ -20,12 +20,15 @@
                     alt="Logo">
                 Express Blog
             </a>
-            <a href="/write">글 작성</a>
+            <a href="/write" class="btn">글 작성</a>
         </div>
     </nav>
     <!-- 바뀌는 요소 -->
-    {% block content %}
-    {% endblock %}
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
     <!-- 공통 요소 -footer -->
     <footer>
         <img src="https://cdn.prod.website-files.com/5bff8886c3964a992e90d465/5c00621b7aefa4f9ee0f4303_wide-shot.svg"
