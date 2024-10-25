@@ -4,20 +4,23 @@
 <h1>메인 페이지</h1>
 {% if list %}
 <!-- 부트스트랩 적용: table -->
-<table class="table">
-    <tr>
-        <th>글제목</th>
-        <th>글내용</th>
-        <th>글날짜</th>
-    </tr>
-
-    {% for writing in list %}
-    <tr>
-        <td><a href="/detail/{{ writing._id }}">{{ writing.title }}</a></td>
-        <td>{{ writing.contents }}</td>
-        <td>{{ writing.date }}</td>
-    </tr>
-    {% endfor %}
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th>글제목</th>
+            <th>글내용</th>
+            <th>글날짜</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        {% for writing in list %}
+        <tr>
+            <td><a href="/detail/{{ writing._id }}" class="btn">{{ writing.title }}</a></td>
+            <td>{{ writing.contents }}</td>
+            <td>{{ writing.date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% else %}
 <p> 작성된 글이 없습니다.</p>
