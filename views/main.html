@@ -14,8 +14,8 @@
     </thead>
     <tbody class="table-group-divider">
         {% for writing in list %}
-        <tr>
-            <td><a href="/detail/{{ writing._id }}" class="btn">{{ writing.title }}</a></td>
+        <tr onclick="location.href='/detail/{{ writing._id }}'">
+            <td>{{ writing.title }}</td>
             <td>{{ writing.contents }}</td>
             <td>{{ writing.date }}</td>
         </tr>

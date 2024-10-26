@@ -69,7 +69,6 @@ app.get("/write", (req, res) => {
   res.render("write");
 });
 
-
 //-------------------------------------
 // write
 //-------------------------------------
@@ -96,10 +95,10 @@ app.post("/write", async (req, res) => {
     res.render("detail", {
       detail: { title: title, contents: contents },
     });
+
   } catch (err) {
     console.error(err);
     // res.status(500).send("Internal Server Error");
-    res.render("write");
   }
 });
 
@@ -113,12 +112,12 @@ app.get("/detail/:id", async (req, res) => {
   try {
     //db에서 가져오기
     const detail = await Writing.findOne({ _id: id });
-    res.render('detail', { 'detail': detail });
+    res.render("detail", { detail: detail });
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal Server Error");
   }
-})
+});
 
 //-------------------------------------
 // edit => get
@@ -161,19 +160,18 @@ app.post("/edit/:id", async (req, res) => {
 //-------------------------------------
 // delete => post
 //-------------------------------------
-app.post('/delete/:id', async (req, res) => {
+app.post("/delete/:id", async (req, res) => {
   const id = req.params.id; //id 가져옴
 
-
-  const delete_content = await Writing.deleteOne({ _id: id }).then(() => {
-    console.log('delete success');
-    res.redirect('/');  //성공 시 메인으로 이동 시키자~!
-    
-  }).catch((err) => {
-    console.error(err);
-    
-  })
-})
+  const delete_content = await Writing.deleteOne({ _id: id })
+    .then(() => {
+      console.log("delete success");
+      res.redirect("/"); //성공 시 메인으로 이동 시키자~!
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
 
 //-----------------------------------
 app.listen(3000, () => {
